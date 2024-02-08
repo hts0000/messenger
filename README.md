@@ -10,6 +10,16 @@ npm install @types/long
 npm install protobufjs protobufjs-cli
 # npm install ts-protoc-gen # 另一种生成js/ts代码的方案
 
+npm install react-hook-form react-hot-toast react-icons
+
+npm install @tailwindcss/forms
+# tailwind.config.js
+plugins: [
+  require("@tailwindcss/forms")({
+    strategy: "class",
+  }),
+],
+
 # tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
