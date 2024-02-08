@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-type GRPCConfig struct {
+type GrpcConfig struct {
 	Name              string
 	Addr              string
 	AuthPublicKeyFile string
@@ -15,7 +15,7 @@ type GRPCConfig struct {
 	Logger            *zap.Logger
 }
 
-func RunGRPCServer(cfg *GRPCConfig) error {
+func RunGrpcServer(cfg *GrpcConfig) error {
 	nameFiled := zap.String("name", cfg.Name)
 	lis, err := net.Listen("tcp", cfg.Addr)
 	if err != nil {

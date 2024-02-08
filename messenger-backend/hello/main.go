@@ -26,7 +26,7 @@ func main() {
 		log.Fatalf("cannot create logger: %v", err)
 	}
 
-	logger.Fatal("run grpc server failed", zap.Error(server.RunGRPCServer(&server.GRPCConfig{
+	logger.Fatal("run grpc server failed", zap.Error(server.RunGrpcServer(&server.GrpcConfig{
 		Name:   "hello",
 		Addr:   ":18081",
 		Logger: logger,
