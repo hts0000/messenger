@@ -8,11 +8,13 @@ import { BsGithub, BsGoogle } from "react-icons/bs";
 import Input from "@/app/_components/inputs/Input";
 import Button from "@/app/_components/Button";
 import AuthSocialButton from "./AuthSocialButton";
+import { useRouter } from "next/navigation";
 
 type AuthFormProps = {};
 type Variant = "LOGIN" | "REGISTER";
 
 const AuthForm = (props: AuthFormProps) => {
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,10 +49,14 @@ const AuthForm = (props: AuthFormProps) => {
 
     if (variant === "REGISTER") {
       // Axios Register
+
+      setVariant("LOGIN");
     }
 
     if (variant === "LOGIN") {
       // Axios Login
+
+      router.push("/conversations");
     }
   };
 

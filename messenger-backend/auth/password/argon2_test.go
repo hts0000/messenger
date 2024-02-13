@@ -1,0 +1,42 @@
+package password
+
+import (
+	"bytes"
+	"testing"
+)
+
+func TestEncryptPassword(t *testing.T) {
+	ag := NewArgon2Gen(WithDefaultSalt())
+
+	cases := []struct {
+		name     string
+		password string
+		salt     []byte
+		want     []byte
+		wantErr  bool
+	}{
+		{
+			name:     "normal_case",
+			password: "n0rm@lP@55w0rd",
+			salt:     []byte{167, 203, 81, 94, 41, 79, 242, 50, 129, 13, 224, 254, 177, 157, 82, 98},
+			want:     []byte{0x8c, 0x49, 0x22, 0x5a, 0x0, 0x81, 0x12, 0xc8, 0x48, 0x40, 0x48, 0x6f, 0xd4, 0x77, 0xc1, 0x3f, 0xe5, 0x8d, 0x8b, 0x28, 0x7a, 0x43, 0xa4, 0x8f, 0x62, 0xb3, 0xf, 0x33, 0x24, 0xc1, 0xcf, 0xdd},
+		},
+		{
+			name:     "with_default_salt_case",
+			password: "n0rm@lP@55w0rd",
+			salt:     []byte{},
+			want:     []byte{0xa7, 0xcb, 0x51, 0x5e, 0x29, 0x4f, 0xf2, 0x32, 0x81, 0xd, 0xe0, 0xfe, 0xb1, 0x9d, 0x52, 0x62, 0x31, 0x26, 0x8a, 0x7c, 0x49, 0x15, 0x6d, 0xbf, 0xef, 0xf2, 0x36, 0x6e, 0x5b, 0x8, 0xf, 0xd0},
+		},
+	}
+
+	for _, cc := range cases {
+		encryptedPassword, err := ag.EncryptPassword(cc.password, cc.salt)
+		if err != nil {
+			t.Fatalf("encrypt password failed, err: %v", err)
+		}
+
+		if !bytes.Equal(encryptedPassword, cc.want) {
+			t.Fatalf("%s: want: %q, get: %q", cc.name, cc.want, encryptedPassword)
+		}
+	}
+}

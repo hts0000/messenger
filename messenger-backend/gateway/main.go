@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	authpb "messenger-backend/auth/api/gen/v1"
 	hellopb "messenger-backend/hello/api/gen/v1"
 	"messenger-backend/share/server"
 	"net/http"
@@ -13,6 +14,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/encoding/protojson"
+
+	// 需要匿名导入errdetails，用以获取errdetails中rpc错误映射到http错误的方法
+	_ "google.golang.org/genproto/googleapis/rpc/errdetails"
 )
 
 func main() {
@@ -43,8 +47,13 @@ func main() {
 	}{
 		{
 			name:         "hello",
-			addr:         "localhost:18081",
+			addr:         "localhost:28081",
 			registerFunc: hellopb.RegisterGreeterHandlerFromEndpoint,
+		},
+		{
+			name:         "auth",
+			addr:         "localhost:18081",
+			registerFunc: authpb.RegisterAuthServiceHandlerFromEndpoint,
 		},
 	}
 

@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import AuthForm from "@/app/(site)/_components/AuthForm";
-import axios from "axios";
 
 export default function Home() {
   return (

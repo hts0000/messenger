@@ -49,6 +49,9 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 
 go get github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
 go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
+
+go get -u gorm.io/gorm
+go get -u gorm.io/driver/mysql
 ```
 
 ## MySQL
@@ -62,10 +65,13 @@ go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway git
 # -p 13306:3306: 将容器3306端口映射到本机13306端口
 # --character-set-server=utf8mb4: 配置数据库字符集
 # --collation-server=utf8mb4_unicode_ci: 配置数据表字符集
+# --restart on-failures: 容器异常退出时，总是重启容器
 docker run --name messenger-mysql \
+            --restart on-failures \
             -v /my/custom:/etc/mysql/conf.d \
             -v /my/own/datadir:/var/lib/mysql \
-            -v /somepath/messenger/sql:/docker-entrypoint-initdb.d \
+            -v /somepath/messenger/mysql/sql:/docker-entrypoint-initdb.d \
+            -v /somepath/messenger/mysql/sql:/docker-entrypoint-initdb.d \
             -e MYSQL_ROOT_PASSWORD=123456 \
             -e MYSQL_DATABASE=messenger \
             -p 13306:3306 \
@@ -75,7 +81,9 @@ docker run --name messenger-mysql \
 
 # 测试使用
 docker run --name messenger-mysql-test \
-            -v /somepath/messenger/sql:/docker-entrypoint-initdb.d \
+            --restart on-failures \
+            -v /somepath/messenger/mysql/conf.d:/etc/mysql/conf.d \
+            -v /somepath/messenger/mysql/sql:/docker-entrypoint-initdb.d \
             -e MYSQL_ROOT_PASSWORD=123456 \
             -e MYSQL_DATABASE=messenger \
             -p 13306:3306 \
@@ -100,3 +108,7 @@ docker exec -it messenger-mysql mysql -uroot -p123456
 | ci       | 修改ci配置文件或脚本，如jenkins fastlame           |
 | chore    | 修改构建脚本、或者增加依赖库、工具等               |
 | revert   | 回滚之前的commit                                   |
+
+## TODO
+1. zap logger自定义打印格式，打印微服务名称
+2. 双token刷新验证
