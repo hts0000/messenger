@@ -9,6 +9,8 @@ import Input from "@/app/_components/inputs/Input";
 import Button from "@/app/_components/Button";
 import AuthSocialButton from "./AuthSocialButton";
 import { useRouter } from "next/navigation";
+import { AuthService } from "@/api/service/auth";
+import { toast } from "react-hot-toast";
 
 type AuthFormProps = {};
 type Variant = "LOGIN" | "REGISTER";
@@ -44,19 +46,61 @@ const AuthForm = (props: AuthFormProps) => {
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
       // Axios Register
-
-      setVariant("LOGIN");
+      AuthService.Register({ ...data })
+        .then((resp) => {
+          toast.success("register success");
+          setVariant("LOGIN");
+        })
+        .catch((errMsg) => {
+          toast.error(errMsg);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+      // axios
+      //   .post("http://localhost:18080/v1/auth/register", data)
+      //   .then((resp) => {
+      //     console.log(resp);
+      //     toast.success("register success");
+      //     setVariant("LOGIN");
+      //   })
+      //   .catch((error) => {
+      //     toast.error(error.response.data.message);
+      //   })
+      //   .finally(() => {
+      //     setIsLoading(false);
+      //   });
     }
 
     if (variant === "LOGIN") {
       // Axios Login
-
-      router.push("/conversations");
+      AuthService.Login({ ...data })
+        .then((resp) => {
+          router.push("/conversations");
+        })
+        .catch((errMsg) => {
+          toast.error(errMsg);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+      // axios
+      //   .post("http://localhost:18080/v1/auth/login", data)
+      //   .then((resp) => {
+      //     console.log(resp);
+      //     router.push("/conversations");
+      //   })
+      //   .catch((error) => {
+      //     toast.error(error.response.data.message);
+      //   })
+      //   .finally(() => {
+      //     setIsLoading(false);
+      //   });
     }
   };
 
