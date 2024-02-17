@@ -76,6 +76,11 @@ func (s *Service) Login(ctx context.Context, req *authpb.AuthRequest) (*authpb.L
 func (s *Service) Register(ctx context.Context, req *authpb.AuthRequest) (*authpb.RegisterResponse, error) {
 	s.Logger.Info("user login", zap.String("user_email", req.Email))
 
+	// check username
+	if req.Name == "" {
+		return nil, status.Error(codes.InvalidArgument, "name is invalid")
+	}
+
 	// check email
 	if req.Email == "" {
 		return nil, status.Error(codes.InvalidArgument, "email is invalid")
@@ -93,7 +98,7 @@ func (s *Service) Register(ctx context.Context, req *authpb.AuthRequest) (*authp
 		return nil, status.Error(codes.Internal, "internal server error")
 	}
 	if user != nil {
-		s.Logger.Error("user already existed", zap.String("email", req.Email))
+		s.Logger.Error("user already existed", zap.String("email", req.Email), zap.Any("user", user))
 		return nil, status.Error(codes.InvalidArgument, "user already existed")
 	}
 
@@ -111,7 +116,7 @@ func (s *Service) Register(ctx context.Context, req *authpb.AuthRequest) (*authp
 	}
 
 	// create user
-	_, err = s.MySQL.CreateUser(ctx, req.Email, encryptedPassword, salt)
+	_, err = s.MySQL.CreateUser(ctx, req.Name, req.Email, encryptedPassword, salt)
 	if err != nil {
 		s.Logger.Error("create user failed", zap.Any("request", req), zap.Error(err))
 		return nil, status.Error(codes.Internal, "internal server error")

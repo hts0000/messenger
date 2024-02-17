@@ -118,6 +118,7 @@ export const auth = $root.auth = (() => {
              * Properties of an AuthRequest.
              * @memberof auth.v1
              * @interface IAuthRequest
+             * @property {string|null} [name] AuthRequest name
              * @property {string|null} [email] AuthRequest email
              * @property {string|null} [password] AuthRequest password
              */
@@ -136,6 +137,14 @@ export const auth = $root.auth = (() => {
                         if (properties[keys[i]] != null)
                             this[keys[i]] = properties[keys[i]];
             }
+
+            /**
+             * AuthRequest name.
+             * @member {string} name
+             * @memberof auth.v1.AuthRequest
+             * @instance
+             */
+            AuthRequest.prototype.name = "";
 
             /**
              * AuthRequest email.
@@ -172,10 +181,14 @@ export const auth = $root.auth = (() => {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
                     case 1: {
-                            message.email = reader.string();
+                            message.name = reader.string();
                             break;
                         }
                     case 2: {
+                            message.email = reader.string();
+                            break;
+                        }
+                    case 3: {
                             message.password = reader.string();
                             break;
                         }
@@ -199,6 +212,8 @@ export const auth = $root.auth = (() => {
                 if (object instanceof $root.auth.v1.AuthRequest)
                     return object;
                 let message = new $root.auth.v1.AuthRequest();
+                if (object.name != null)
+                    message.name = String(object.name);
                 if (object.email != null)
                     message.email = String(object.email);
                 if (object.password != null)
@@ -220,9 +235,12 @@ export const auth = $root.auth = (() => {
                     options = {};
                 let object = {};
                 if (options.defaults) {
+                    object.name = "";
                     object.email = "";
                     object.password = "";
                 }
+                if (message.name != null && message.hasOwnProperty("name"))
+                    object.name = message.name;
                 if (message.email != null && message.hasOwnProperty("email"))
                     object.email = message.email;
                 if (message.password != null && message.hasOwnProperty("password"))

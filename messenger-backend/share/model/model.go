@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 type User struct {
 	ID                 uint64 `gorm:"primarykey"`
+	Name               string
 	Email              string
-	Username           string
 	Password           []byte
 	Salt               []byte
 	AvatarUrl          string

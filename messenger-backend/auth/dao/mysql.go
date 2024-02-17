@@ -18,15 +18,16 @@ func NewMySQL(mysql *gorm.DB) *MySQL {
 }
 
 func (m *MySQL) GetUser(ctx context.Context, email string) (*model.User, error) {
-	user := &model.User{}
-	if err := m.mysql.WithContext(ctx).Model(&model.User{Email: email}).Take(&user).Error; err != nil {
+	var user *model.User
+	if err := m.mysql.WithContext(ctx).Model(&user).Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-func (m *MySQL) CreateUser(ctx context.Context, email string, password, salt []byte) (*model.User, error) {
+func (m *MySQL) CreateUser(ctx context.Context, name, email string, password, salt []byte) (*model.User, error) {
 	user := &model.User{
+		Name:     name,
 		Email:    email,
 		Password: password,
 		Salt:     salt,

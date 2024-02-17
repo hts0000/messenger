@@ -66,6 +66,9 @@ export namespace auth {
         /** Properties of an AuthRequest. */
         interface IAuthRequest {
 
+            /** AuthRequest name */
+            name?: (string|null);
+
             /** AuthRequest email */
             email?: (string|null);
 
@@ -81,6 +84,9 @@ export namespace auth {
              * @param [properties] Properties to set
              */
             constructor(properties?: auth.v1.IAuthRequest);
+
+            /** AuthRequest name. */
+            public name: string;
 
             /** AuthRequest email. */
             public email: string;
