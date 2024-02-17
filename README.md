@@ -1,3 +1,16 @@
+## Quick Start
+```bash
+# run backend
+cd messenger-backend
+go run messenger-backend/gateway
+go run messenger-backend/auth
+
+# run front-end
+cd messenger-front
+npm install
+npm run dev
+```
+
 ## Frontend
 ```bash
 npx create-next-app@latest
@@ -65,9 +78,9 @@ go get -u gorm.io/driver/mysql
 # -p 13306:3306: 将容器3306端口映射到本机13306端口
 # --character-set-server=utf8mb4: 配置数据库字符集
 # --collation-server=utf8mb4_unicode_ci: 配置数据表字符集
-# --restart on-failures: 容器异常退出时，总是重启容器
+# --restart on-failure:3: 容器异常退出时，总是重启容器，最多重启3次
 docker run --name messenger-mysql \
-            --restart on-failures \
+            --restart on-failure:3 \
             -v /my/custom:/etc/mysql/conf.d \
             -v /my/own/datadir:/var/lib/mysql \
             -v /somepath/messenger/mysql/sql:/docker-entrypoint-initdb.d \
@@ -81,7 +94,7 @@ docker run --name messenger-mysql \
 
 # 测试使用
 docker run --name messenger-mysql-test \
-            --restart on-failures \
+            --restart on-failure:3 \
             -v /somepath/messenger/mysql/conf.d:/etc/mysql/conf.d \
             -v /somepath/messenger/mysql/sql:/docker-entrypoint-initdb.d \
             -e MYSQL_ROOT_PASSWORD=123456 \
