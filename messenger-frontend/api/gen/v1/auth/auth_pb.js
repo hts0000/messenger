@@ -49,7 +49,7 @@ export const auth = $root.auth = (() => {
              * @typedef LoginCallback
              * @type {function}
              * @param {Error|null} error Error, if any
-             * @param {auth.v1.LoginResponse} [response] LoginResponse
+             * @param {auth.v1.AuthResponse} [response] AuthResponse
              */
 
             /**
@@ -58,12 +58,12 @@ export const auth = $root.auth = (() => {
              * @memberof auth.v1.AuthService
              * @instance
              * @param {auth.v1.IAuthRequest} request AuthRequest message or plain object
-             * @param {auth.v1.AuthService.LoginCallback} callback Node-style callback called with the error, if any, and LoginResponse
+             * @param {auth.v1.AuthService.LoginCallback} callback Node-style callback called with the error, if any, and AuthResponse
              * @returns {undefined}
              * @variation 1
              */
             Object.defineProperty(AuthService.prototype.login = function login(request, callback) {
-                return this.rpcCall(login, $root.auth.v1.AuthRequest, $root.auth.v1.LoginResponse, request, callback);
+                return this.rpcCall(login, $root.auth.v1.AuthRequest, $root.auth.v1.AuthResponse, request, callback);
             }, "name", { value: "Login" });
 
             /**
@@ -72,7 +72,7 @@ export const auth = $root.auth = (() => {
              * @memberof auth.v1.AuthService
              * @instance
              * @param {auth.v1.IAuthRequest} request AuthRequest message or plain object
-             * @returns {Promise<auth.v1.LoginResponse>} Promise
+             * @returns {Promise<auth.v1.AuthResponse>} Promise
              * @variation 2
              */
 
@@ -82,7 +82,7 @@ export const auth = $root.auth = (() => {
              * @typedef RegisterCallback
              * @type {function}
              * @param {Error|null} error Error, if any
-             * @param {auth.v1.RegisterResponse} [response] RegisterResponse
+             * @param {auth.v1.AuthResponse} [response] AuthResponse
              */
 
             /**
@@ -91,12 +91,12 @@ export const auth = $root.auth = (() => {
              * @memberof auth.v1.AuthService
              * @instance
              * @param {auth.v1.IAuthRequest} request AuthRequest message or plain object
-             * @param {auth.v1.AuthService.RegisterCallback} callback Node-style callback called with the error, if any, and RegisterResponse
+             * @param {auth.v1.AuthService.RegisterCallback} callback Node-style callback called with the error, if any, and AuthResponse
              * @returns {undefined}
              * @variation 1
              */
             Object.defineProperty(AuthService.prototype.register = function register(request, callback) {
-                return this.rpcCall(register, $root.auth.v1.AuthRequest, $root.auth.v1.RegisterResponse, request, callback);
+                return this.rpcCall(register, $root.auth.v1.AuthRequest, $root.auth.v1.AuthResponse, request, callback);
             }, "name", { value: "Register" });
 
             /**
@@ -105,7 +105,7 @@ export const auth = $root.auth = (() => {
              * @memberof auth.v1.AuthService
              * @instance
              * @param {auth.v1.IAuthRequest} request AuthRequest message or plain object
-             * @returns {Promise<auth.v1.RegisterResponse>} Promise
+             * @returns {Promise<auth.v1.AuthResponse>} Promise
              * @variation 2
              */
 
@@ -277,25 +277,23 @@ export const auth = $root.auth = (() => {
             return AuthRequest;
         })();
 
-        v1.LoginResponse = (function() {
+        v1.AuthResponse = (function() {
 
             /**
-             * Properties of a LoginResponse.
+             * Properties of an AuthResponse.
              * @memberof auth.v1
-             * @interface ILoginResponse
-             * @property {string|null} [accessToken] LoginResponse accessToken
-             * @property {number|null} [expirseIn] LoginResponse expirseIn
+             * @interface IAuthResponse
              */
 
             /**
-             * Constructs a new LoginResponse.
+             * Constructs a new AuthResponse.
              * @memberof auth.v1
-             * @classdesc Represents a LoginResponse.
-             * @implements ILoginResponse
+             * @classdesc Represents an AuthResponse.
+             * @implements IAuthResponse
              * @constructor
-             * @param {auth.v1.ILoginResponse=} [properties] Properties to set
+             * @param {auth.v1.IAuthResponse=} [properties] Properties to set
              */
-            function LoginResponse(properties) {
+            function AuthResponse(properties) {
                 if (properties)
                     for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null)
@@ -303,165 +301,20 @@ export const auth = $root.auth = (() => {
             }
 
             /**
-             * LoginResponse accessToken.
-             * @member {string} accessToken
-             * @memberof auth.v1.LoginResponse
-             * @instance
-             */
-            LoginResponse.prototype.accessToken = "";
-
-            /**
-             * LoginResponse expirseIn.
-             * @member {number} expirseIn
-             * @memberof auth.v1.LoginResponse
-             * @instance
-             */
-            LoginResponse.prototype.expirseIn = 0;
-
-            /**
-             * Decodes a LoginResponse message from the specified reader or buffer.
+             * Decodes an AuthResponse message from the specified reader or buffer.
              * @function decode
-             * @memberof auth.v1.LoginResponse
+             * @memberof auth.v1.AuthResponse
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {auth.v1.LoginResponse} LoginResponse
+             * @returns {auth.v1.AuthResponse} AuthResponse
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            LoginResponse.decode = function decode(reader, length) {
+            AuthResponse.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.auth.v1.LoginResponse();
-                while (reader.pos < end) {
-                    let tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1: {
-                            message.accessToken = reader.string();
-                            break;
-                        }
-                    case 2: {
-                            message.expirseIn = reader.int32();
-                            break;
-                        }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Creates a LoginResponse message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof auth.v1.LoginResponse
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {auth.v1.LoginResponse} LoginResponse
-             */
-            LoginResponse.fromObject = function fromObject(object) {
-                if (object instanceof $root.auth.v1.LoginResponse)
-                    return object;
-                let message = new $root.auth.v1.LoginResponse();
-                if (object.accessToken != null)
-                    message.accessToken = String(object.accessToken);
-                if (object.expirseIn != null)
-                    message.expirseIn = object.expirseIn | 0;
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a LoginResponse message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof auth.v1.LoginResponse
-             * @static
-             * @param {auth.v1.LoginResponse} message LoginResponse
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            LoginResponse.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (options.defaults) {
-                    object.accessToken = "";
-                    object.expirseIn = 0;
-                }
-                if (message.accessToken != null && message.hasOwnProperty("accessToken"))
-                    object.accessToken = message.accessToken;
-                if (message.expirseIn != null && message.hasOwnProperty("expirseIn"))
-                    object.expirseIn = message.expirseIn;
-                return object;
-            };
-
-            /**
-             * Converts this LoginResponse to JSON.
-             * @function toJSON
-             * @memberof auth.v1.LoginResponse
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            LoginResponse.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            /**
-             * Gets the default type url for LoginResponse
-             * @function getTypeUrl
-             * @memberof auth.v1.LoginResponse
-             * @static
-             * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-             * @returns {string} The default type url
-             */
-            LoginResponse.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-                if (typeUrlPrefix === undefined) {
-                    typeUrlPrefix = "type.googleapis.com";
-                }
-                return typeUrlPrefix + "/auth.v1.LoginResponse";
-            };
-
-            return LoginResponse;
-        })();
-
-        v1.RegisterResponse = (function() {
-
-            /**
-             * Properties of a RegisterResponse.
-             * @memberof auth.v1
-             * @interface IRegisterResponse
-             */
-
-            /**
-             * Constructs a new RegisterResponse.
-             * @memberof auth.v1
-             * @classdesc Represents a RegisterResponse.
-             * @implements IRegisterResponse
-             * @constructor
-             * @param {auth.v1.IRegisterResponse=} [properties] Properties to set
-             */
-            function RegisterResponse(properties) {
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Decodes a RegisterResponse message from the specified reader or buffer.
-             * @function decode
-             * @memberof auth.v1.RegisterResponse
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {auth.v1.RegisterResponse} RegisterResponse
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            RegisterResponse.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.auth.v1.RegisterResponse();
+                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.auth.v1.AuthResponse();
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
@@ -474,59 +327,59 @@ export const auth = $root.auth = (() => {
             };
 
             /**
-             * Creates a RegisterResponse message from a plain object. Also converts values to their respective internal types.
+             * Creates an AuthResponse message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof auth.v1.RegisterResponse
+             * @memberof auth.v1.AuthResponse
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {auth.v1.RegisterResponse} RegisterResponse
+             * @returns {auth.v1.AuthResponse} AuthResponse
              */
-            RegisterResponse.fromObject = function fromObject(object) {
-                if (object instanceof $root.auth.v1.RegisterResponse)
+            AuthResponse.fromObject = function fromObject(object) {
+                if (object instanceof $root.auth.v1.AuthResponse)
                     return object;
-                return new $root.auth.v1.RegisterResponse();
+                return new $root.auth.v1.AuthResponse();
             };
 
             /**
-             * Creates a plain object from a RegisterResponse message. Also converts values to other types if specified.
+             * Creates a plain object from an AuthResponse message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof auth.v1.RegisterResponse
+             * @memberof auth.v1.AuthResponse
              * @static
-             * @param {auth.v1.RegisterResponse} message RegisterResponse
+             * @param {auth.v1.AuthResponse} message AuthResponse
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            RegisterResponse.toObject = function toObject() {
+            AuthResponse.toObject = function toObject() {
                 return {};
             };
 
             /**
-             * Converts this RegisterResponse to JSON.
+             * Converts this AuthResponse to JSON.
              * @function toJSON
-             * @memberof auth.v1.RegisterResponse
+             * @memberof auth.v1.AuthResponse
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            RegisterResponse.prototype.toJSON = function toJSON() {
+            AuthResponse.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the default type url for RegisterResponse
+             * Gets the default type url for AuthResponse
              * @function getTypeUrl
-             * @memberof auth.v1.RegisterResponse
+             * @memberof auth.v1.AuthResponse
              * @static
              * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
              * @returns {string} The default type url
              */
-            RegisterResponse.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            AuthResponse.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
                 if (typeUrlPrefix === undefined) {
                     typeUrlPrefix = "type.googleapis.com";
                 }
-                return typeUrlPrefix + "/auth.v1.RegisterResponse";
+                return typeUrlPrefix + "/auth.v1.AuthResponse";
             };
 
-            return RegisterResponse;
+            return AuthResponse;
         })();
 
         return v1;

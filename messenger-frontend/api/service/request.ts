@@ -1,12 +1,38 @@
 import axios from "axios";
+import toast from "react-hot-toast";
+import camelcaseKey from "camelcase-keys";
 
 export namespace Messenger {
   const url = "http://localhost:18080/v1";
 
-  const authData = {
-    token: "",
-    expiryMs: 0,
-  };
+  const instance = axios.create({
+    baseURL: url,
+    timeout: 3000,
+  });
+
+  instance.interceptors.response.use(
+    (resp) => {
+      return camelcaseKey(resp.data, {
+        deep: true,
+        pascalCase: true,
+      });
+    },
+    (error) => {
+      console.log(error);
+      toast.error(error.response.data.message);
+      return Promise.reject(error);
+    }
+  );
+
+  const WithAuth = instance.interceptors.request.use(
+    (config) => {
+      // add token
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   export interface RequestOption<REQ> {
     method: "GET" | "POST" | "PUT" | "DELETE";
@@ -14,27 +40,21 @@ export namespace Messenger {
     data?: REQ;
   }
 
-  export async function SendRequest<REQ, RES>(
-    o: RequestOption<REQ>
-  ): Promise<RES> {
-    return new Promise((resolve, reject) => {
-      const instance = axios.create({
-        baseURL: url,
-        timeout: 3000,
-      });
+  export async function SendRequest<REQ, RES>(o: RequestOption<REQ>) {
+    // 屏蔽添加token
+    instance.interceptors.request.eject(WithAuth);
+    return instance<RES>({
+      method: o.method,
+      url: o.path,
+      data: o.data,
+    });
+  }
 
-      instance
-        .request<RES>({
-          method: o.method,
-          url: o.path,
-          data: o.data,
-        })
-        .then((resp) => {
-          resolve(resp.data);
-        })
-        .catch((error) => {
-          reject(error.response.data.message as string);
-        });
+  export async function SendRequestWithAuth<REQ, RES>(o: RequestOption<REQ>) {
+    return instance<RES>({
+      method: o.method,
+      url: o.path,
+      data: o.data,
     });
   }
 }

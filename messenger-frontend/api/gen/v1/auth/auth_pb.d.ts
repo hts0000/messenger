@@ -20,7 +20,7 @@ export namespace auth {
             /**
              * Calls Login.
              * @param request AuthRequest message or plain object
-             * @param callback Node-style callback called with the error, if any, and LoginResponse
+             * @param callback Node-style callback called with the error, if any, and AuthResponse
              */
             public login(request: auth.v1.IAuthRequest, callback: auth.v1.AuthService.LoginCallback): void;
 
@@ -29,12 +29,12 @@ export namespace auth {
              * @param request AuthRequest message or plain object
              * @returns Promise
              */
-            public login(request: auth.v1.IAuthRequest): Promise<auth.v1.LoginResponse>;
+            public login(request: auth.v1.IAuthRequest): Promise<auth.v1.AuthResponse>;
 
             /**
              * Calls Register.
              * @param request AuthRequest message or plain object
-             * @param callback Node-style callback called with the error, if any, and RegisterResponse
+             * @param callback Node-style callback called with the error, if any, and AuthResponse
              */
             public register(request: auth.v1.IAuthRequest, callback: auth.v1.AuthService.RegisterCallback): void;
 
@@ -43,7 +43,7 @@ export namespace auth {
              * @param request AuthRequest message or plain object
              * @returns Promise
              */
-            public register(request: auth.v1.IAuthRequest): Promise<auth.v1.RegisterResponse>;
+            public register(request: auth.v1.IAuthRequest): Promise<auth.v1.AuthResponse>;
         }
 
         namespace AuthService {
@@ -51,16 +51,16 @@ export namespace auth {
             /**
              * Callback as used by {@link auth.v1.AuthService#login}.
              * @param error Error, if any
-             * @param [response] LoginResponse
+             * @param [response] AuthResponse
              */
-            type LoginCallback = (error: (Error|null), response?: auth.v1.LoginResponse) => void;
+            type LoginCallback = (error: (Error|null), response?: auth.v1.AuthResponse) => void;
 
             /**
              * Callback as used by {@link auth.v1.AuthService#register}.
              * @param error Error, if any
-             * @param [response] RegisterResponse
+             * @param [response] AuthResponse
              */
-            type RegisterCallback = (error: (Error|null), response?: auth.v1.RegisterResponse) => void;
+            type RegisterCallback = (error: (Error|null), response?: auth.v1.AuthResponse) => void;
         }
 
         /** Properties of an AuthRequest. */
@@ -133,116 +133,52 @@ export namespace auth {
             public static getTypeUrl(typeUrlPrefix?: string): string;
         }
 
-        /** Properties of a LoginResponse. */
-        interface ILoginResponse {
-
-            /** LoginResponse accessToken */
-            accessToken?: (string|null);
-
-            /** LoginResponse expirseIn */
-            expirseIn?: (number|null);
+        /** Properties of an AuthResponse. */
+        interface IAuthResponse {
         }
 
-        /** Represents a LoginResponse. */
-        class LoginResponse implements ILoginResponse {
+        /** Represents an AuthResponse. */
+        class AuthResponse implements IAuthResponse {
 
             /**
-             * Constructs a new LoginResponse.
+             * Constructs a new AuthResponse.
              * @param [properties] Properties to set
              */
-            constructor(properties?: auth.v1.ILoginResponse);
-
-            /** LoginResponse accessToken. */
-            public accessToken: string;
-
-            /** LoginResponse expirseIn. */
-            public expirseIn: number;
+            constructor(properties?: auth.v1.IAuthResponse);
 
             /**
-             * Decodes a LoginResponse message from the specified reader or buffer.
+             * Decodes an AuthResponse message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns LoginResponse
+             * @returns AuthResponse
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): auth.v1.LoginResponse;
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): auth.v1.AuthResponse;
 
             /**
-             * Creates a LoginResponse message from a plain object. Also converts values to their respective internal types.
+             * Creates an AuthResponse message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns LoginResponse
+             * @returns AuthResponse
              */
-            public static fromObject(object: { [k: string]: any }): auth.v1.LoginResponse;
+            public static fromObject(object: { [k: string]: any }): auth.v1.AuthResponse;
 
             /**
-             * Creates a plain object from a LoginResponse message. Also converts values to other types if specified.
-             * @param message LoginResponse
+             * Creates a plain object from an AuthResponse message. Also converts values to other types if specified.
+             * @param message AuthResponse
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: auth.v1.LoginResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: auth.v1.AuthResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this LoginResponse to JSON.
+             * Converts this AuthResponse to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
 
             /**
-             * Gets the default type url for LoginResponse
-             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-             * @returns The default type url
-             */
-            public static getTypeUrl(typeUrlPrefix?: string): string;
-        }
-
-        /** Properties of a RegisterResponse. */
-        interface IRegisterResponse {
-        }
-
-        /** Represents a RegisterResponse. */
-        class RegisterResponse implements IRegisterResponse {
-
-            /**
-             * Constructs a new RegisterResponse.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: auth.v1.IRegisterResponse);
-
-            /**
-             * Decodes a RegisterResponse message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns RegisterResponse
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): auth.v1.RegisterResponse;
-
-            /**
-             * Creates a RegisterResponse message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns RegisterResponse
-             */
-            public static fromObject(object: { [k: string]: any }): auth.v1.RegisterResponse;
-
-            /**
-             * Creates a plain object from a RegisterResponse message. Also converts values to other types if specified.
-             * @param message RegisterResponse
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: auth.v1.RegisterResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this RegisterResponse to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-
-            /**
-             * Gets the default type url for RegisterResponse
+             * Gets the default type url for AuthResponse
              * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
              * @returns The default type url
              */

@@ -125,3 +125,4 @@ docker exec -it messenger-mysql mysql -uroot -p123456
 ## TODO
 1. zap logger自定义打印格式，打印微服务名称
 2. 双token刷新验证
+3. 使用更简单的typescript-gen

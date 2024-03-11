@@ -7,14 +7,14 @@ package auth.v1;
 option go_package = "messenger-backend/auth/api/gen/v1;authpb";
 
 service AuthService {
-    rpc Login (AuthRequest) returns (LoginResponse) {
+    rpc Login (AuthRequest) returns (AuthResponse) {
         option (google.api.http) = {
             post: "/v1/auth/login"
             body: "*"
         };
     }
 
-    rpc Register (AuthRequest) returns (RegisterResponse) {
+    rpc Register (AuthRequest) returns (AuthResponse) {
         option (google.api.http) = {
             post: "/v1/auth/register"
             body: "*"
@@ -28,9 +28,4 @@ message AuthRequest {
     string password = 3;
 }
 
-message LoginResponse {
-    string access_token = 1;
-    int32 expirse_in = 2;
-}
-
-message RegisterResponse {}
+message AuthResponse {}

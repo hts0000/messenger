@@ -15,7 +15,7 @@ import { toast } from "react-hot-toast";
 type AuthFormProps = {};
 type Variant = "LOGIN" | "REGISTER";
 
-const AuthForm = (props: AuthFormProps) => {
+const AuthForm: React.FC<AuthFormProps> = (props: AuthFormProps) => {
   const router = useRouter();
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
@@ -56,9 +56,6 @@ const AuthForm = (props: AuthFormProps) => {
           toast.success("register success");
           setVariant("LOGIN");
         })
-        .catch((errMsg) => {
-          toast.error(errMsg);
-        })
         .finally(() => {
           setIsLoading(false);
         });
@@ -81,10 +78,8 @@ const AuthForm = (props: AuthFormProps) => {
       // Axios Login
       AuthService.Login({ ...data })
         .then((resp) => {
+          toast.success("login success");
           router.push("/conversations");
-        })
-        .catch((errMsg) => {
-          toast.error(errMsg);
         })
         .finally(() => {
           setIsLoading(false);

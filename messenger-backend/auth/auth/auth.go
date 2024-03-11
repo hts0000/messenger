@@ -11,7 +11,9 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
 )
@@ -35,15 +37,15 @@ type TokenGenerator interface {
 	GenerateToken(uid string, expire time.Duration) (token string, err error)
 }
 
-func (s *Service) Login(ctx context.Context, req *authpb.AuthRequest) (*authpb.LoginResponse, error) {
+func (s *Service) Login(ctx context.Context, req *authpb.AuthRequest) (*authpb.AuthResponse, error) {
 	s.Logger.Info("user login", zap.String("user_email", req.Email))
 
 	// check user exists
 	user, err := s.MySQL.GetUser(ctx, req.Email)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			s.Logger.Error("user already existed", zap.String("email", req.Email))
-			return nil, status.Error(codes.InvalidArgument, "user already existed")
+			s.Logger.Error("user not existed", zap.String("email", req.Email))
+			return nil, status.Error(codes.InvalidArgument, "user not existed")
 		}
 		s.Logger.Error("get user failed", zap.String("email", req.Email), zap.Error(err))
 		return nil, status.Error(codes.Internal, "internal server error")
@@ -67,13 +69,19 @@ func (s *Service) Login(ctx context.Context, req *authpb.AuthRequest) (*authpb.L
 		return nil, status.Error(codes.Internal, "internal server error")
 	}
 
-	return &authpb.LoginResponse{
-		AccessToken: tkn,
-		ExpirseIn:   int32(s.TokenExpire.Seconds()),
-	}, nil
+	// set token to metadata
+	md := metadata.MD{}
+	// Grpc-Metadata-Token
+	md.Set("token", tkn)
+	if err := grpc.SetHeader(ctx, md); err != nil {
+		s.Logger.Error("set token to metadata failed", zap.Any("metadata", md))
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+
+	return &authpb.AuthResponse{}, nil
 }
 
-func (s *Service) Register(ctx context.Context, req *authpb.AuthRequest) (*authpb.RegisterResponse, error) {
+func (s *Service) Register(ctx context.Context, req *authpb.AuthRequest) (*authpb.AuthResponse, error) {
 	s.Logger.Info("user login", zap.String("user_email", req.Email))
 
 	// check username
@@ -123,5 +131,5 @@ func (s *Service) Register(ctx context.Context, req *authpb.AuthRequest) (*authp
 	}
 
 	// return user
-	return &authpb.RegisterResponse{}, nil
+	return &authpb.AuthResponse{}, nil
 }
